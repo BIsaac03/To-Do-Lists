@@ -1,0 +1,84 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+}
+
+body{
+    height: 500px;
+    width: 500px;
+    padding: 100px;
+}
+
+.projectEntry{
+    display: grid;
+    grid-template: repeat(5, auto) / 1fr 1fr;
+    gap: 20px;
+    padding: 30px 30px 15px 30px;
+    background-color: rgb(218, 217, 217);
+}
+
+.title.project{
+    grid-area: 1 / 1 / 2 / 2;
+    font-size: 48px;
+}
+
+.numToDosRemaining.project{
+    grid-area: 2 / 1 / 3 / 2;
+}
+
+.dueDate.project{
+    grid-area: 1 / 2 / 2 / 3;
+    text-align: right;
+}
+
+.notes.project{
+    grid-area: 3 / 1 / 4 / 3;
+    text-align: center;
+}
+
+.toDoList{
+    grid-area: 4 / 1 / 5 / 3;
+}
+
+.addToDo{
+    grid-area: 5 / 1 / 6 / 3;
+    justify-self: center;
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 32px;
+}
+
+.toDoEntry{
+    display: grid;
+    grid-template: repeat(3, auto) /  50px auto auto;
+    font-size: 28px;
+    background-color: antiquewhite;
+}
+
+.toDoList{
+    display: grid;
+    row-gap: 20px;
+}
+
+.toDoList .checkbox{
+    grid-area: 1 / 1 / 4 / 2;
+    width: 20px;
+    height: 20px;
+    align-self: center;
+}
+
+.toDoList .title{
+    grid-area: 1 / 2 / 2 / 3;
+    font-size: 32px;
+}
+
+.toDoList .priority{
+    grid-area: 1 / 3 / 2 / 4;
+    text-align: right;
+}
+
+.toDoList .dueDate{
+    grid-area: 2 / 2 / 3 / 4;
+}
