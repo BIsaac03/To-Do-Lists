@@ -1,7 +1,10 @@
-function  makeProject(title, dueDate, toDoList, notes){
-    let numToDosRemaining = toDoList.length;
+let projects = [];
 
-    return {title, dueDate, toDoList, numToDosRemaining, notes}
+function makeProject(title, dueDate, toDoList, notes){
+    let numToDosRemaining = toDoList.length;
+    let projectNum = projects.length;
+
+    return {title, dueDate, toDoList, numToDosRemaining, notes, projectNum}
 }
 
 function makeToDo(title, dueDate, priority, notes, project){
@@ -12,8 +15,7 @@ function makeToDo(title, dueDate, priority, notes, project){
 
 function newProjectDOM(project){
     const projectDiv = document.getElementById('projects');
-    const numProjects = projectDiv.childElementCount;
-    const projectClass = 'project'+numProjects;
+    const projectClass = 'project'+project.projectNum;
 
     const newProject = document.createElement('div');
     newProject.id = projectClass;
@@ -28,15 +30,19 @@ function newProjectDOM(project){
     const toDoList = document.createElement('div');
     toDoList.classList.add('toDoList', 'project', projectClass);
     const numToDosRemaining = document.createElement('p');
-    numToDosRemaining.textContent = project.numToDosRemaining;
+    numToDosRemaining.textContent = 0;
     numToDosRemaining.classList.add('numToDosRemaining', 'project', projectClass);
     const notes = document.createElement('p');
     notes.textContent = project.notes;
     notes.classList.add('notes', 'project', projectClass);
 
     const addToDoButton = document.createElement('button');
-    addToDoButton.classList.add('addToDo', projectClass)
+    addToDoButton.classList.add('addToDo', projectClass);
     addToDoButton.textContent = 'Add task';
+    addToDoButton.addEventListener("click", () => {
+        let toDo = makeToDo('Clean', 'tomorrow', 'high', '', project);
+        newToDoDOM(toDo);
+    })
     
     newProject.appendChild(title);
     newProject.appendChild(dueDate);
@@ -52,18 +58,32 @@ function newProjectDOM(project){
 }
 
 function newToDoDOM(toDo){
-    let toDoListClass = toDo.project + " toDoList";
+    let toDoListClass = "project" + toDo.project.projectNum + " toDoList";
     const projectToDoList = document.getElementsByClassName(toDoListClass)[0];
+
+    let numToDosRemainingClass = "project" + toDo.project.projectNum + " numToDosRemaining";
+    const numToDosRemaining = document.getElementsByClassName(numToDosRemainingClass)[0];
+    numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) + 1;
+    toDo.project.numToDosRemaining += 1;
 
     const numToDos = projectToDoList.childElementCount;
     const toDoClass = 'toDo'+numToDos;
-    const newToDo = document.createElement('div');
+    const newToDo =  document.createElement('div');
     newToDo.classList.add('toDoEntry');
     newToDo.id = toDoClass;
-
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.classList.add('checkbox', 'toDo', toDoClass);
+    checkbox.addEventListener("change", () =>{
+        if (checkbox.checked){
+            numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) - 1;
+            toDo.project.numToDosRemaining -= 1;
+        }
+        else{numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) + 1;
+            toDo.project.numToDosRemaining += 1
+        }
+    });
+
     const title = document.createElement('span');
     title.textContent = toDo.title;
     title.classList.add('title', 'toDo', toDoClass);
@@ -85,11 +105,8 @@ function newToDoDOM(toDo){
     projectToDoList.appendChild(newToDo);
 }
 
-myToDos = [];
-myToDos.push(makeToDo('Clean', 'tomorrow', 'high', 'NA', 'project0'))
-myToDos.push(makeToDo('Clean', 'tomorrow', 'high', 'NA', 'project0'))
-myToDos.push(makeToDo('Clean', 'tomorrow', 'high', 'NA', 'project0'))
-myToDos.push(makeToDo('Clean', 'tomorrow', 'high', 'NA', 'project0'))
-
-project1 = makeProject('Best Project', 'May', myToDos, 'This is the best project ever.');
+let myToDos = [];
+let project1 = makeProject('Best Project', 'May', myToDos, 'This is the best project ever.');
+myToDos.push(makeToDo('Clean', 'tomorrow', 'high', '', project1))
+projects.push(project1);
 newProjectDOM(project1);
