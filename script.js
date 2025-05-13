@@ -134,6 +134,31 @@ function removeToDoDOM(toDo, projectToDoList, checkbox, numToDosRemaining){
     }
 }
 
+const addProjectButton = document.getElementById('newProject');
+addProjectButton.addEventListener("click", () => {
+    const newProject = makeProject('General', 'May', defaultProjectToDos, 'This is the best project ever.');
+    projects.push(newProject);
+    newProjectDOM(newProject);
+});
+    
+const deleteCheckedButton = document.getElementById('deleteChecked');
+deleteCheckedButton.addEventListener("click", () => {
+    for (let i = 0; i < projects.length; i++){
+        for (let j = 0; j < projects[i].toDoList.length; j++){
+            if (projects[i].toDoList[j].isFinished){
+                removeToDo(projects[i].toDoList[j]);
+            };
+        }
+    }
+
+    const allChecks = document.querySelectorAll('.checkbox');
+    for (let i = 0; i < allChecks.length; i++){
+        if (allChecks[i].checked){
+            allChecks[i].parentElement.parentElement.removeChild(allChecks[i].parentElement)
+        }
+    }
+});
+
 let defaultProjectToDos = [];
 let defaultProject = makeProject('General', 'May', defaultProjectToDos, 'This is the best project ever.');
 defaultProjectToDos.push(makeToDo('Clean', 'Tomorrow', 'High', '', defaultProject))
