@@ -9,8 +9,22 @@ function makeProject(title, dueDate, toDoList, notes){
 
 function makeToDo(title, dueDate, priority, notes, project){
     let isFinished = false;
+    project.numToDosRemaining += 1;
 
-    return{title, dueDate, priority, notes, project, isFinished}
+    const changeStatus = () => {
+        isFinished = ! isFinished;
+        if (isFinished){
+            project.numToDosRemaining - 1;
+        }
+        else{project.numToDosRemaining + 1;}
+    }
+    return{title, dueDate, priority, notes, project, isFinished, changeStatus}
+}
+
+function removeToDo(toDo){
+    const index = toDo.project.toDoList.indexOf(toDo)
+    toDo.project.toDoList.splice(index, 1);
+    toDo.project.numToDosRemaining -= 1;
 }
 
 function newProjectDOM(project){
@@ -40,7 +54,7 @@ function newProjectDOM(project){
     addToDoButton.classList.add('addToDo', projectClass);
     addToDoButton.textContent = 'Add task';
     addToDoButton.addEventListener("click", () => {
-        let toDo = makeToDo('Clean', 'tomorrow', 'high', '', project);
+        let toDo = makeToDo('Clean', 'Tomorrow', 'High', '', project);
         newToDoDOM(toDo);
     })
     
@@ -64,7 +78,6 @@ function newToDoDOM(toDo){
     let numToDosRemainingClass = "project" + toDo.project.projectNum + " numToDosRemaining";
     const numToDosRemaining = document.getElementsByClassName(numToDosRemainingClass)[0];
     numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) + 1;
-    toDo.project.numToDosRemaining += 1;
 
     const numToDos = projectToDoList.childElementCount;
     const toDoClass = 'toDo'+numToDos;
@@ -74,14 +87,12 @@ function newToDoDOM(toDo){
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.classList.add('checkbox', 'toDo', toDoClass);
-    checkbox.addEventListener("change", () =>{
+    checkbox.addEventListener('change', () =>{
+        toDo.changeStatus()
         if (checkbox.checked){
             numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) - 1;
-            toDo.project.numToDosRemaining -= 1;
         }
-        else{numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) + 1;
-            toDo.project.numToDosRemaining += 1
-        }
+        else{numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) + 1;}
     });
 
     const title = document.createElement('span');
@@ -97,6 +108,11 @@ function newToDoDOM(toDo){
     notes.textContent = toDo.notes;
     notes.classList.add('notes', 'toDo', toDoClass);
 
+    newToDo.addEventListener('click', () => {
+        removeToDo(toDo);
+        removeToDoDOM(newToDo, projectToDoList, numToDosRemaining);
+    })
+
     newToDo.append(checkbox)
     newToDo.appendChild(title);
     newToDo.appendChild(dueDate);
@@ -105,8 +121,13 @@ function newToDoDOM(toDo){
     projectToDoList.appendChild(newToDo);
 }
 
-let myToDos = [];
-let project1 = makeProject('Best Project', 'May', myToDos, 'This is the best project ever.');
-myToDos.push(makeToDo('Clean', 'tomorrow', 'high', '', project1))
-projects.push(project1);
-newProjectDOM(project1);
+function removeToDoDOM(toDo, projectToDoList, numToDosRemaining){
+    projectToDoList.removeChild(toDo);
+    numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) - 1;
+}
+
+let defaultProjectToDos = [];
+let defaultProject = makeProject('General', 'May', defaultProjectToDos, 'This is the best project ever.');
+defaultProjectToDos.push(makeToDo('Clean', 'Tomorrow', 'High', '', defaultProject))
+projects.push(defaultProject);
+newProjectDOM(defaultProject);
