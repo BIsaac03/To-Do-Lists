@@ -24,7 +24,9 @@ function makeToDo(title, dueDate, priority, notes, project){
 function removeToDo(toDo){
     const index = toDo.project.toDoList.indexOf(toDo)
     toDo.project.toDoList.splice(index, 1);
-    toDo.project.numToDosRemaining -= 1;
+    if (!toDo.isFinished){
+        toDo.project.numToDosRemaining -= 1;
+    }
 }
 
 function newProjectDOM(project){
@@ -113,7 +115,7 @@ function newToDoDOM(toDo){
     deleteIcon.classList.add('delete', toDoClass);
     deleteIcon.addEventListener('click', () => {
         removeToDo(toDo);
-        removeToDoDOM(newToDo, projectToDoList, numToDosRemaining);
+        removeToDoDOM(newToDo, projectToDoList, checkbox, numToDosRemaining);
     })
 
     newToDo.append(checkbox)
@@ -125,13 +127,15 @@ function newToDoDOM(toDo){
     projectToDoList.appendChild(newToDo);
 }
 
-function removeToDoDOM(toDo, projectToDoList, numToDosRemaining){
+function removeToDoDOM(toDo, projectToDoList, checkbox, numToDosRemaining){
     projectToDoList.removeChild(toDo);
-    numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) - 1;
+    if (!checkbox.checked){
+        numToDosRemaining.textContent = parseInt(numToDosRemaining.textContent) - 1;
+    }
 }
 
 let defaultProjectToDos = [];
 let defaultProject = makeProject('General', 'May', defaultProjectToDos, 'This is the best project ever.');
-defaultProjectToDos.push(makeToDo('Clean', 'Tomorrow', '', '', defaultProject))
+defaultProjectToDos.push(makeToDo('Clean', 'Tomorrow', 'High', '', defaultProject))
 projects.push(defaultProject);
 newProjectDOM(defaultProject);
