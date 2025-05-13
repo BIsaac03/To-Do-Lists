@@ -108,7 +108,10 @@ function newToDoDOM(toDo){
     notes.textContent = toDo.notes;
     notes.classList.add('notes', 'toDo', toDoClass);
 
-    newToDo.addEventListener('click', () => {
+    const deleteIcon = document.createElement('img');
+    deleteIcon.src = './icons/trash-can-outline.svg';
+    deleteIcon.classList.add('delete', toDoClass);
+    deleteIcon.addEventListener('click', () => {
         removeToDo(toDo);
         removeToDoDOM(newToDo, projectToDoList, numToDosRemaining);
     })
@@ -118,6 +121,7 @@ function newToDoDOM(toDo){
     newToDo.appendChild(dueDate);
     newToDo.appendChild(priority);
     newToDo.appendChild(notes);
+    newToDo.appendChild(deleteIcon);
     projectToDoList.appendChild(newToDo);
 }
 
@@ -128,6 +132,6 @@ function removeToDoDOM(toDo, projectToDoList, numToDosRemaining){
 
 let defaultProjectToDos = [];
 let defaultProject = makeProject('General', 'May', defaultProjectToDos, 'This is the best project ever.');
-defaultProjectToDos.push(makeToDo('Clean', 'Tomorrow', 'High', '', defaultProject))
+defaultProjectToDos.push(makeToDo('Clean', 'Tomorrow', '', '', defaultProject))
 projects.push(defaultProject);
 newProjectDOM(defaultProject);

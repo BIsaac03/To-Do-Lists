@@ -93,6 +93,13 @@ body{
     font-size: 32px;
 }
 
+.toDoList .delete{
+    grid-area: 1 / 3 / 2 / 4;
+    height: 50px;
+    width: 50px;
+    align-self: right;
+}
+
 .toDoList .priority{
     grid-area: 1 / 3 / 2 / 4;
     text-align: right;
