@@ -1,16 +1,29 @@
 let projects = [];
 
-function makeProject(title, dueDate, toDoList, notes){
-    let numToDosRemaining = toDoList.length;
+function makeProject(general){
     let projectNum = projects.length;
 
-    return {title, dueDate, toDoList, numToDosRemaining, notes, projectNum}
+    let title = "General";
+    let dueDate = "Unspecified";
+    let notes = "Tasks unrelated to any other project";
+    
+    if (!general){
+        title = prompt("Project Name: ");
+        dueDate = prompt("Due Date: ");
+        notes = prompt("Additional Notes: ")
+    }
+
+    return {title, dueDate, toDoList: [], numToDosRemaining: 0, notes, projectNum}
 }
 
-function makeToDo(title, dueDate, priority, notes, project){
-    let isFinished = false;
+function makeToDo(project){
     project.numToDosRemaining += 1;
 
+    const title = prompt("Task Title: ");
+    const dueDate = prompt("Due Date: ");
+    const priority = prompt("Priority: ");
+    const notes = prompt("Additional Notes:");
+    
     const changeStatus = () => {
         isFinished = ! isFinished;
         if (isFinished){
@@ -18,7 +31,7 @@ function makeToDo(title, dueDate, priority, notes, project){
         }
         else{project.numToDosRemaining + 1;}
     }
-    return{title, dueDate, priority, notes, project, isFinished, changeStatus}
+    return{title, dueDate, priority, notes, project, isFinished: false, changeStatus}
 }
 
 function removeToDo(toDo){
@@ -56,7 +69,7 @@ function newProjectDOM(project){
     addToDoButton.classList.add('addToDo', projectClass);
     addToDoButton.textContent = 'Add task';
     addToDoButton.addEventListener("click", () => {
-        let toDo = makeToDo('Clean', 'Tomorrow', 'High', '', project);
+        let toDo = makeToDo(project);
         newToDoDOM(toDo);
     })
     
@@ -136,7 +149,7 @@ function removeToDoDOM(toDo, projectToDoList, checkbox, numToDosRemaining){
 
 const addProjectButton = document.getElementById('newProject');
 addProjectButton.addEventListener("click", () => {
-    const newProject = makeProject('General', 'May', defaultProjectToDos, 'This is the best project ever.');
+    const newProject = makeProject(false);
     projects.push(newProject);
     newProjectDOM(newProject);
 });
@@ -159,8 +172,6 @@ deleteCheckedButton.addEventListener("click", () => {
     }
 });
 
-let defaultProjectToDos = [];
-let defaultProject = makeProject('General', 'May', defaultProjectToDos, 'This is the best project ever.');
-defaultProjectToDos.push(makeToDo('Clean', 'Tomorrow', 'High', '', defaultProject))
-projects.push(defaultProject);
-newProjectDOM(defaultProject);
+let generalProject = makeProject(true);
+projects.push(generalProject);
+newProjectDOM(generalProject);
